@@ -49,22 +49,6 @@
   services.xserver.displayManager.sddm.enable = true;
   services.xserver.desktopManager.plasma5.enable = true;
 
-  programs.hyprland = {
-    enable = true;
-    xwayland.enable = true;
-    nvidiaPatches = true;
-  };
-
-  environment.sessionVariables = {
-    WLR_MO_HARDWARE_CURSOR = "1";
-    NIXOS_OZONE_WL = "1";
-  };
-
-  xdg.portal = {
-    enable = true;
-    extraPortals = [pkgs.xdg-desktop-portal-gtk];
-  };
-
   # Configure keymap in X11
   services.xserver = {
     layout = "br";
@@ -104,56 +88,24 @@
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
       firefox
+      kitty
       neovim
-      gcc
+      curl
       git
       gh
       go
-      kate
-      dunst
-      kitty
-      swww
-      rofi
-      networkmanagerapplet
-      curl
-      neofetch
-      waybar
-      swaylock
-      lazygit
-    #  thunderbird
+      gcc
     ];
   };
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  services.xserver.videoDrivers = ["nvidia"];
-  hardware.opengl = {
-    enable = true;
-    driSupport = true;
-    driSupport32Bit = true;
-  };
-
-  hardware.nvidia = {
-    modesetting.enable = true;
-    open = true;
-    nvidiaSettings = true;
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
-  };
-
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
   #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
   #  wget
-  ];
-
-  nixpkgs.overlays = [
-    (self: super: {
-      waybar = super.waybar.overrideAttrs (oldAttrs: {
-        mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true"];
-      });
-    })
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
